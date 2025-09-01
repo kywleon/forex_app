@@ -8,9 +8,9 @@ export const getExchangeRates = async (req, res) => {
 
     const apiKey = process.env.CURRENCY_API_KEY;
 
-    console.log(currencies);
-    console.log(date);
-    console.log(base_currency);
+    // console.log(currencies);
+    // console.log(date);
+    // console.log(base_currency);
 
     const response = await axios.get(`https://api.currencyapi.com/v3/historical?apikey=${apiKey}&currencies=${currencies}&date=${date}`);
     
@@ -19,7 +19,7 @@ export const getExchangeRates = async (req, res) => {
     const rates = data.data;
 
     for (const [currency, info] of Object.entries(rates)) {
-      console.log("Currency:", info.code, "Rate:", info.value);
+      // console.log("Currency:", info.code, "Rate:", info.value);
 
       // 找到 target currency
       const targetCurrency = await Currency.findOne({
@@ -29,7 +29,7 @@ export const getExchangeRates = async (req, res) => {
       });
 
       if (!targetCurrency) {
-        console.log("⚠️ Currency not found in DB:", info.code);
+        // console.log("⚠️ Currency not found in DB:", info.code);
         continue;
       }
 
