@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: forex_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: forex_db
+      MYSQL_USER: forex_user
+      MYSQL_PASSWORD: forex_pass
+    ports:
+      - "3310:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: forex_backend
+    command: npm run dev
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5000:5000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
+
+  frontend:
+    build: ./frontend
+    container_name: forex_frontend
+    command: npm run dev
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5175:5173"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

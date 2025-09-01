@@ -75,7 +75,7 @@ function App() {
         <Loading />
       ) : (
         <div className="row g-3">
-          <RatesGrid rates={rates.rates} message={rates.message} />
+          <RatesGrid rates={visibleRates} message={rates.message} />
         </div>
       )}
     </div>
