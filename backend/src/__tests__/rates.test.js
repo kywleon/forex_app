@@ -2,15 +2,28 @@ import request from "supertest";
 import app from "../app.js";
 
 describe("/api/rates endpoints", () => {
-  test("GET /api/rates/latest 应返回最新汇率", async () => {
+  test("GET /api/rates/latest Should return the latest exchange rate", async () => {
     const res = await request(app).get("/api/rates/latest");
-    console.log("1 : " ,res.body);
     expect(res.statusCode).toBe(200);
   });
 
-  test("GET /api/rates/2025-08-27 应返回指定日期汇率", async () => {
+  test("GET /api/rates/2025-08-27 Should return the exchange rate for the specified date", async () => {
     const res = await request(app).get("/api/rates/2025-08-27");
-    console.log("2 : " ,res.body);
     expect(res.statusCode).toBe(200);
+  });
+
+  test("GET /api/rates/ Should return the 404 Not Found Error", async () => {
+    const res = await request(app).get("/api/rates/");
+    expect(res.statusCode).toBe(404);
+  });
+
+  test("GET /api/rates/invalid Should return invalid date format error", async () => {
+    const res = await request(app).get("/api/rates/invalid");
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({
+      date: null,
+      rates: [],
+      message: "Invalid date format. Expected YYYY-MM-DD or 'latest'."
+    });
   });
 });
