@@ -9,12 +9,24 @@ function App() {
   const [rates, setRates] = useState({ date: "", rates: [], message: "" });
   const [visibleRates, setVisibleRates] = useState([]); // Currently displayed section
   const [loading, setLoading] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date("2025-08-27"));
+  const [selectedDate, setSelectedDate] = useState(getYesterday()); // default to yesterday
   const [itemsToShow, setItemsToShow] = useState(12); // Quantity per load
+
+  function getYesterday() {
+    const today = new Date();
+    today.setDate(today.getDate() - 1);
+    today.setHours(0, 0, 0, 0);
+    return today;
+  }
 
   const fetchRates = (date) => {
     setLoading(true);
-    const formattedDate = date.toISOString().split("T")[0];
+    // Format the date using local time to avoid time zone issues
+    const formattedDate = [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, "0"),
+      String(date.getDate()).padStart(2, "0"),
+    ].join("-");
     api
       .getRatesByDate(formattedDate)
       .then((data) => {
@@ -63,7 +75,7 @@ function App() {
         <Loading />
       ) : (
         <div className="row g-3">
-          <RatesGrid rates={visibleRates} />
+          <RatesGrid rates={rates.rates} message={rates.message} />
         </div>
       )}
     </div>

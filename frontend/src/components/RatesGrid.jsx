@@ -1,10 +1,10 @@
 import RateCard from "./RateCard";
 
-export default function RatesGrid({ rates }) {
+export default function RatesGrid({ rates, message }) {
   if (rates.length === 0) {
     return (
       <div className="col-12 text-center">
-        <p className="text-muted">No data available</p>
+        <p className="text-muted">{ message }</p>
       </div>
     );
   }
