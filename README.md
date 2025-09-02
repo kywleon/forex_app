@@ -37,8 +37,13 @@ Forex App is a foreign exchange rate application with a React.js frontend and an
 git clone <your-repo-url>
 cd forex_app
 
-2. Copy the environment file
-cp env.example .env
+2. Copy the environment files for backend and frontend  
+```bash
+# For backend
+cp backend/env.example backend/.env
+
+# For frontend
+cp frontend/env.example frontend/.env
 
 3. Start the project using Docker
 docker-compose up --build
